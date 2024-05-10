@@ -19,6 +19,27 @@
       integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
       crossorigin="anonymous"
     />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <style>
+      .whatsapp-button {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+      }
+      .whatsapp-button:hover {
+        background-color: #128c7e;
+      }
+    </style>
   </head>
   <body>
     <div id="app" class="container mt-1">
@@ -125,6 +146,13 @@
                 </a>
               </div>
             </div>
+            <a
+              href="https://wa.me/6281235827827"
+              target="_blank"
+              class="whatsapp-button btn btn-success"
+              >help
+              <i class="fab fa-whatsapp"></i>
+            </a>
           </div>
         </div>
       </div>
@@ -283,49 +311,7 @@
         </div>
       </div>
     </div>
-    <script>
-      function formatInput(event) {
-        // Mengambil nilai input dari event
-        let inputNumber = event.target.value;
-
-        // Menghapus tanda titik sebelum menambahkan kembali sebagai pemisah ribuan
-        inputNumber = inputNumber.replace(/\./g, "");
-
-        // Menambahkan titik sebagai pemisah ribuan
-        inputNumber = addThousandSeparator(inputNumber);
-
-        // Menyimpan nilai input yang telah diformat kembali ke input
-        event.target.value = inputNumber;
-
-        // Panggil fungsi untuk memvalidasi input
-        validateInput(inputNumber);
-      }
-
-      function addThousandSeparator(inputNumber) {
-        // Mengubah angka menjadi string dan membalikkan string
-        let reversedNumber = inputNumber
-          .toString()
-          .split("")
-          .reverse()
-          .join("");
-
-        // Menambahkan titik sebagai pemisah ribuan setiap 3 digit
-        let formattedNumber = reversedNumber.replace(/\d{3}(?=\d)/g, "$&.");
-
-        // Memutar kembali string dan mengembalikan hasil
-        return formattedNumber.split("").reverse().join("");
-      }
-
-      function validateInput(inputNumber) {
-        // Validasi input form
-        if (inputNumber.trim() !== "") {
-          // Pastikan input tidak kosong
-          document.getElementById("hasil").textContent = "v";
-        } else {
-          document.getElementById("hasil").textContent = ""; // Kosongkan hasil jika input kosong
-        }
-      }
-    </script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 
     <script
       src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
