@@ -22,183 +22,249 @@
   </head>
   <body>
     <div id="app" class="container mt-5">
-      <h1 class="text-center">PERJADIN ONE</h1>
+      <h1 class="display-4 text-center">PERJADIN ONE</h1>
 
-      <div class="row mt-5">
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th>ID Perjadin</th>
-              <th>Nama</th>
-              <th>Tujuan Perjadin</th>
-              <th>Tanggal Berangkat</th>
-              <th>Aksi</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(expense, index) in perjadins" :key="index">
-              <td>{{ expense.No }}</td>
-              <td>{{ expense.Nama }}</td>
-              <td>{{ expense.Tempat_Tujuan }}</td>
-              <td>{{ expense.Tgl_Brkt | formatTanggal }}</td>
-              <td>
-                <button
-                  @click="dipilih=expense"
-                  class="btn btn-primary"
-                  data-bs-toggle="modal"
-                  data-bs-target="#exampleModal"
-                >
-                  input rincian
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- First Section -->
-      <div class="row mt-5">
-        <div class="col-lg-6">
-          <!-- {{perjadins}} -->
+      <div v-if="tampilan">
+        <!-- tampilan muka -->
 
-          <!-- modal -->
-          <div
-            class="modal fade"
-            id="exampleModal"
-            tabindex="-1"
-            aria-labelledby="exampleModalLabel"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-xl">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">
-                    Modal title
-                  </h5>
-                  <button
-                    type="button"
-                    class="btn-close"
-                    data-bs-dismiss="modal"
-                    aria-label="Close"
-                  ></button>
-                </div>
-                <div class="modal-body">
-                  {{dataRiil}}
-                  <div>
-                    <div class="mb-3">
-                      <label for="idPerjadin" class="form-label"
-                        >ID Perjadin</label
-                      >
-                      <input
-                        disabled
-                        type="text"
-                        id="idPerjadin"
-                        class="form-control"
-                        v-model="dipilih.No"
-                      />
-                      <!-- {{dipilih}} -->
-                    </div>
-                    <div class="mb-3">
-                      <label for="expenseType" class="form-label"
-                        >jenis pengeluaran</label
-                      >
-                      <select
-                        id="expenseType"
-                        class="form-select form-control"
-                        v-model="selectedExpenseType"
-                      >
-                        <option value="" disabled>jenis pengeluaran</option>
-                        <option value="uang harian">Uang Harian</option>
-                        <option value="transport">Transport</option>
-                        <option value="penginapan">Penginapan</option>
-                        <option value="representatif">Representatif</option>
-                      </select>
-                    </div>
-                    <div class="mb-3">
-                      <label for="description" class="form-label"
-                        >Description</label
-                      >
-                      <input
-                        type="text"
-                        id="description"
-                        class="form-control"
-                        v-model="description"
-                        placeholder="Enter description"
-                      />
-                    </div>
-                    <div class="mb-3">
-                      <label for="description" class="form-label"
-                        >Apakah ada Bukti ?</label
-                      >
-                      <input
-                        type="checkbox"
-                        id="description"
-                        class=""
-                        v-model="bukti"
-                        placeholder="Enter description"
-                      />
-                    </div>
-                    <div class="mb-3">
-                      <label for="amount" class="form-label">Amount</label>
-                      <input
-                        type="number"
-                        id="amount"
-                        class="form-control"
-                        v-model.number="amount"
-                        placeholder="Enter amount"
-                      />
-                    </div>
-                    <button @click="saveRiil" class="btn btn-primary">
-                      Submit
-                    </button>
-                  </div>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-bs-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button
-                    @click="saveRiilsekaligus()"
-                    type="button"
-                    class="btn btn-primary"
-                  >
-                    Save changes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-          <!-- modal -->
-
-          <div class="section"></div>
-        </div>
-
-        <!-- Second Section (visible on LG screens, hidden on XS screens) -->
-        <div class="col-lg-6 d-none d-lg-block border">
-          <div class="section p-2">
+        <!-- First Section -->
+        <div class="row mt-5">
+          <div class="col-lg-6">
+            <!-- {{perjadins}} -->
             <table class="table table-hover">
               <thead>
                 <tr>
                   <th>ID Perjadin</th>
-                  <th>Jenis Pengeluaran</th>
-                  <th>Uraian</th>
-                  <th>Bukti</th>
-                  <th>Amount</th>
+                  <th>Nama</th>
+                  <th>Tujuan Perjadin</th>
+                  <th>Tanggal Berangkat</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="(expense, index) in expenses" :key="index">
-                  <td>{{ expense.idPerjadin }}</td>
-                  <td>{{ expense.expenseType }}</td>
-                  <td>{{ expense.description }}</td>
-                  <td>{{ expense.bukti }}</td>
-                  <td>{{ expense.amount }}</td>
+                <tr
+                  v-for="(expense, index) in dataStatusPerjadin"
+                  :key="index"
+                  @click="dipilih = expense"
+                >
+                  <td>{{ expense.No }}</td>
+                  <td>{{ expense.Nama }}</td>
+                  <td>{{ expense.Tempat_Tujuan }}</td>
+                  <td>{{ expense.Tgl_Brkt | formatTanggal }}</td>
+                  <td>
+                    <button
+                      v-if="!expense.status"
+                      @click="dipilih=expense; tampilan = false;"
+                      class="btn btn-primary"
+                    >
+                      input rincian
+                    </button>
+                  </td>
                 </tr>
               </tbody>
             </table>
+
+            <div class="section"></div>
+          </div>
+
+          <!-- Second Section (visible on LG screens, hidden on XS screens) -->
+          <div class="col-lg-6 d-none d-lg-block border">
+            <div class="section p-2">
+              <!-- {{dipilih}}
+            <br /><br />
+            {{databaseRiil}}
+            <br /><br />
+            {{filteredData}} -->
+              <b
+                ><h1 class="display-5 text-center mb-3">
+                  Rincian Pengeluaran Riil
+                </h1></b
+              >
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Jenis</th>
+                    <th>Uraian</th>
+                    <th>Bukti</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(expense, index) in filteredData" :key="index">
+                    <td class="text-center">{{ expense.noSPD }}</td>
+                    <td>{{ expense.jenis }}</td>
+                    <td>{{ expense.uraian }}</td>
+                    <td>
+                      <p>{{ expense.bukti }}</p>
+                    </td>
+                    <td class="text-right">
+                      {{ expense.nominal | formatRibuan }}
+                    </td>
+                  </tr>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th>Total</th>
+                      <th class="text-right">
+                        {{totalNominal | formatRibuan}}
+                      </th>
+                    </tr>
+                  </thead>
+                </tbody>
+              </table>
+              <div class="row" v-if="filteredData.length > 0">
+                <a
+                  class="ml-auto"
+                  href="https://docs.google.com/spreadsheets/d/1WsH56pUuMMD_wxVQ15vRCXrT-DHvPoqBHOh8BZzLrLM/edit#gid=945884136"
+                  target="_blank"
+                >
+                  <button class="btn btn-warning">Cetak</button>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div v-if="tampilan === false">
+        <!-- tambilan input -->
+        {{tampilan}}
+        <div class="row">
+          <div class="col-6">
+            <!-- {{databaseRiil}} -->
+            <br /><br />
+            <!-- {{perjadins}} -->
+            <b><h1 class="display-5 mb-3">{{dipilih.Nama}}</h1></b>
+            <div>
+              <div class="mb-3">
+                <label for="idPerjadin" class="form-label">ID Perjadin</label>
+                <input
+                  disabled
+                  type="text"
+                  id="idPerjadin"
+                  class="form-control"
+                  v-model="dipilih.No"
+                />
+                <!-- {{dipilih}} -->
+              </div>
+              <div class="mb-3">
+                <label for="expenseType" class="form-label"
+                  >jenis pengeluaran</label
+                >
+                <select
+                  id="expenseType"
+                  class="form-select form-control"
+                  v-model="selectedExpenseType"
+                >
+                  <option value="" disabled>jenis pengeluaran</option>
+                  <option value="uang harian">Uang Harian</option>
+                  <option value="transport">Transport</option>
+                  <option value="penginapan">Penginapan</option>
+                  <option value="representatif">Representatif</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <input
+                  type="text"
+                  id="description"
+                  class="form-control"
+                  v-model="description"
+                  placeholder="Enter description"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="description" class="form-label"
+                  >Apakah ada Bukti ?</label
+                >
+                <input
+                  type="checkbox"
+                  id="description"
+                  class=""
+                  v-model="bukti"
+                  placeholder="Enter description"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="amount" class="form-label">Amount</label>
+                <input
+                  type="number"
+                  id="amount"
+                  class="form-control"
+                  v-model.number="amount"
+                  placeholder="Enter amount"
+                />
+              </div>
+              <button @click="saveRiil" class="btn btn-primary">Submit</button>
+              <div class="">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  @click="tampilan=true"
+                >
+                  Close
+                </button>
+                <button
+                  @click="saveRiilsekaligus()"
+                  type="button"
+                  class="btn btn-primary"
+                >
+                  Save changes
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="section p-2">
+              <!-- {{dipilih}}
+              <br /><br />
+              {{databaseRiil}}
+              <br /><br />
+              {{filteredData}} -->
+              <b
+                ><h1 class="display-5 text-center mb-3">
+                  Rincian Pengeluaran Riil
+                </h1></b
+              >
+              <!-- {{dataRiil}} -->
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Jenis</th>
+                    <th>Uraian</th>
+                    <th>Bukti</th>
+                    <th>Amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="(expense, index) in dataRiil" :key="index">
+                    <td class="text-center">{{ expense.no }}</td>
+                    <td>{{ expense.jenis }}</td>
+                    <td>{{ expense.uraian }}</td>
+                    <td>
+                      <p>{{ expense.bukti }}</p>
+                    </td>
+                    <td class="text-right">
+                      {{ expense.nominal | formatRibuan }}
+                    </td>
+                  </tr>
+                  <thead>
+                    <tr>
+                      <th></th>
+                      <th></th>
+                      <th></th>
+                      <th>Total</th>
+                      <th class="text-right">
+                        {{totalNominal | formatRibuan}}
+                      </th>
+                    </tr>
+                  </thead>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </div>
@@ -236,10 +302,49 @@
           amount: null,
           perjadins: [],
           dipilih: "",
+          tampilan: true,
           dataRiil: [],
+          databaseRiil: [],
           expenses: JSON.parse(localStorage.getItem("expenses")) || [],
         },
+        computed: {
+          dataStatusPerjadin() {
+            const hasilSaatDiatas = this.perjadins.map((item1) => {
+              const item2 = this.databaseRiil.find(
+                (item2) => item1.No === parseInt(item2.noSPD)
+              );
+              if (item2) {
+                return { ...item1, status: item2.status };
+              } else {
+                return item1;
+              }
+            });
+            return hasilSaatDiatas;
+          },
+          filteredData() {
+            return this.databaseRiil.filter(
+              (item) => item.noSPD == this.dipilih.No
+            );
+          },
+          totalNominal() {
+            return this.filteredData.reduce(
+              (total, item) => total + item.nominal,
+              0
+            );
+          },
+        },
         filters: {
+          statusIcon: function (value) {
+            if (value === true) {
+              return '<span style="color: green">&#10003;</span>'; // Simbol centang hijau
+            } else {
+              return '<span style="color: red">&#10007;</span>'; // Simbol silang merah
+            }
+          },
+          formatRibuan: function (value) {
+            if (!value) return "";
+            return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+          },
           formatTanggal: function (value) {
             if (!value) return "";
             const tanggalObjek = new Date(value);
@@ -272,7 +377,7 @@
               var a6 = obj.uraian;
               var a7 = obj.nominal;
 
-              var lin = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=insert&table=dataPengeluaranRiil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}"}`;
+              var lin = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=insert&table=dataPengeluaranRiil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}","status":true}`;
               // this.test = lin;
               let app = this;
               $.ajax({
@@ -326,6 +431,19 @@
             });
 
             console.log("Task Berhasil di Simpan");
+          },
+          ambilDataRiil() {
+            this.databaseRiil = [];
+
+            // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
+            var url =
+              "https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=read&table=dataPengeluaranRiil";
+
+            let app = this;
+            $.getJSON(url, function (json) {
+              // console.log(json.data);
+              app.databaseRiil = json.data;
+            });
           },
 
           ambilDataPerjadin() {
@@ -385,6 +503,7 @@
         },
         created() {
           this.ambilDataPerjadin();
+          this.ambilDataRiil();
         },
       });
     </script>
