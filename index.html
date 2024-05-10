@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Perjadin One</title>
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <div id="app" class="container mt-5">
+      <h1 class="text-center">PERJADIN ONE</h1>
+
+      <div class="row mt-5">
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>ID Perjadin</th>
+              <th>Nama</th>
+              <th>Tujuan Perjadin</th>
+              <th>Tanggal Berangkat</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(expense, index) in perjadins" :key="index">
+              <td>{{ expense.No }}</td>
+              <td>{{ expense.Nama }}</td>
+              <td>{{ expense.Tempat_Tujuan }}</td>
+              <td>{{ expense.Tgl_Brkt | formatTanggal }}</td>
+              <td>
+                <button
+                  @click="dipilih=expense"
+                  class="btn btn-primary"
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                >
+                  input rincian
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- First Section -->
+      <div class="row mt-5">
+        <div class="col-lg-6">
+          <!-- {{perjadins}} -->
+
+          <!-- modal -->
+          <div
+            class="modal fade"
+            id="exampleModal"
+            tabindex="-1"
+            aria-labelledby="exampleModalLabel"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-xl">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">
+                    Modal title
+                  </h5>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"
+                  ></button>
+                </div>
+                <div class="modal-body">
+                  {{dataRiil}}
+                  <div>
+                    <div class="mb-3">
+                      <label for="idPerjadin" class="form-label"
+                        >ID Perjadin</label
+                      >
+                      <input
+                        disabled
+                        type="text"
+                        id="idPerjadin"
+                        class="form-control"
+                        v-model="dipilih.No"
+                      />
+                      <!-- {{dipilih}} -->
+                    </div>
+                    <div class="mb-3">
+                      <label for="expenseType" class="form-label"
+                        >jenis pengeluaran</label
+                      >
+                      <select
+                        id="expenseType"
+                        class="form-select form-control"
+                        v-model="selectedExpenseType"
+                      >
+                        <option value="" disabled>jenis pengeluaran</option>
+                        <option value="uang harian">Uang Harian</option>
+                        <option value="transport">Transport</option>
+                        <option value="penginapan">Penginapan</option>
+                        <option value="representatif">Representatif</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="description" class="form-label"
+                        >Description</label
+                      >
+                      <input
+                        type="text"
+                        id="description"
+                        class="form-control"
+                        v-model="description"
+                        placeholder="Enter description"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="description" class="form-label"
+                        >Apakah ada Bukti ?</label
+                      >
+                      <input
+                        type="checkbox"
+                        id="description"
+                        class=""
+                        v-model="bukti"
+                        placeholder="Enter description"
+                      />
+                    </div>
+                    <div class="mb-3">
+                      <label for="amount" class="form-label">Amount</label>
+                      <input
+                        type="number"
+                        id="amount"
+                        class="form-control"
+                        v-model.number="amount"
+                        placeholder="Enter amount"
+                      />
+                    </div>
+                    <button @click="saveRiil" class="btn btn-primary">
+                      Submit
+                    </button>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-bs-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button
+                    @click="saveRiilsekaligus()"
+                    type="button"
+                    class="btn btn-primary"
+                  >
+                    Save changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- modal -->
+
+          <div class="section"></div>
+        </div>
+
+        <!-- Second Section (visible on LG screens, hidden on XS screens) -->
+        <div class="col-lg-6 d-none d-lg-block border">
+          <div class="section p-2">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>ID Perjadin</th>
+                  <th>Jenis Pengeluaran</th>
+                  <th>Uraian</th>
+                  <th>Bukti</th>
+                  <th>Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr v-for="(expense, index) in expenses" :key="index">
+                  <td>{{ expense.idPerjadin }}</td>
+                  <td>{{ expense.expenseType }}</td>
+                  <td>{{ expense.description }}</td>
+                  <td>{{ expense.bukti }}</td>
+                  <td>{{ expense.amount }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <!-- ajax -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script> -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // Initialize Vue instance
+      new Vue({
+        el: "#app", // Mount Vue to the element with id 'app'
+        data: {
+          idPerjadin: "",
+          selectedExpenseType: "",
+          description: "",
+          bukti: false,
+          amount: null,
+          perjadins: [],
+          dipilih: "",
+          dataRiil: [],
+          expenses: JSON.parse(localStorage.getItem("expenses")) || [],
+        },
+        filters: {
+          formatTanggal: function (value) {
+            if (!value) return "";
+            const tanggalObjek = new Date(value);
+            const tanggal = String(tanggalObjek.getDate()).padStart(2, "0");
+            const bulan = String(tanggalObjek.getMonth() + 1).padStart(2, "0"); // Perhatikan penambahan 1 karena bulan dimulai dari 0
+            const tahun = tanggalObjek.getFullYear();
+            return `${tanggal}-${bulan}-${tahun}`;
+          },
+        },
+        methods: {
+          saveRiil() {
+            var abc = {
+              jenis: this.selectedExpenseType,
+              nama: this.dipilih.Nama,
+              no: this.dipilih.No,
+              bukti: this.bukti,
+              uraian: this.description,
+              nominal: this.amount,
+            };
+            this.dataRiil.push(abc);
+          },
+          saveRiilsekaligus() {
+            const dataArray = this.dataRiil;
+            dataArray.forEach((obj) => {
+              var waktu1 = Date.now();
+              var a2 = obj.jenis;
+              var a3 = obj.nama;
+              var a4 = obj.no;
+              var a5 = obj.bukti;
+              var a6 = obj.uraian;
+              var a7 = obj.nominal;
+
+              var lin = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=insert&table=dataPengeluaranRiil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}"}`;
+              // this.test = lin;
+              let app = this;
+              $.ajax({
+                type: "GET",
+                url: lin,
+                crossDomain: true,
+                dataType: "jsonp",
+                dataType: "text",
+                success: function (resultData) {
+                  //   alert("Save Complete");
+                  // app.newTodo.task = ''
+                  // app.newTodo.deadline = ''
+                  // app.newTodo.monthly = false
+                  // app.isLoading = false;
+                  // app.GetDataTasks();
+                },
+              });
+
+              console.log("Task Berhasil di Simpan");
+            });
+          },
+
+          saveRiilsatu2() {
+            this.dataRiil.foreach((obj) => {});
+
+            var waktu1 = Date.now();
+            var a2 = this.selectedExpenseType;
+            var a3 = this.dipilih.Nama;
+            var a4 = this.dipilih.No;
+            var a5 = this.bukti;
+            var a6 = this.description;
+            var a7 = this.amount;
+
+            var lin = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=insert&table=dataPengeluaranRiil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}"}`;
+            // this.test = lin;
+            let app = this;
+            $.ajax({
+              type: "GET",
+              url: lin,
+              crossDomain: true,
+              dataType: "jsonp",
+              dataType: "text",
+              success: function (resultData) {
+                //   alert("Save Complete");
+                // app.newTodo.task = ''
+                // app.newTodo.deadline = ''
+                // app.newTodo.monthly = false
+                // app.isLoading = false;
+                // app.GetDataTasks();
+              },
+            });
+
+            console.log("Task Berhasil di Simpan");
+          },
+
+          ambilDataPerjadin() {
+            this.perjadins = [];
+
+            // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
+            var url =
+              "https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=read&table=dataPerjadinJatim24";
+
+            let app = this;
+            $.getJSON(url, function (json) {
+              // console.log(json.data);
+              app.perjadins = json.data;
+            });
+          },
+          kirimData() {
+            var itimestamp = this.id_dipilih;
+            console.log(itimestamp);
+            var url = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=update&table=dataPerjadinJatim24&No=${itimestamp}&data={"col8":"oke"}`;
+            // this.test = url;
+            // timestamp=${itimestamp}
+            let app = this;
+            $.ajax({
+              type: "GET",
+              url: url,
+              crossDomain: true,
+              dataType: "jsonp",
+              dataType: "text",
+              success: function (resultData) {
+                // alert('Task dipindahkan ke Arsip')
+                app.ambilDataPerjadin();
+              },
+            });
+          },
+          submitExpense: function () {
+            // Create an object to store the expense data
+            const expense = {
+              idPerjadin: this.idPerjadin,
+              expenseType: this.selectedExpenseType,
+              description: this.description,
+              amount: this.amount,
+            };
+            // Get existing expenses from local storage or initialize an empty array
+            const expenses = JSON.parse(localStorage.getItem("expenses")) || [];
+            // Add the new expense to the array
+            expenses.push(expense);
+            // Save the updated expenses array back to local storage
+            localStorage.setItem("expenses", JSON.stringify(expenses));
+            // Reset form fields after submission
+            this.idPerjadin = "";
+            this.selectedExpenseType = "";
+            this.description = "";
+            this.amount = null;
+            // Optionally, you can notify the user that the expense has been saved
+            alert("Expense saved successfully!");
+          },
+        },
+        created() {
+          this.ambilDataPerjadin();
+        },
+      });
+    </script>
+  </body>
+</html>
