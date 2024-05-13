@@ -412,7 +412,7 @@
         methods: {
           saveRiil() {
             if (
-              (this.selectedExpenseType,
+              (this.selectedExpenseType !== null && this.selectedExpenseType !== undefined && this.selectedExpenseType !== '',
               this.bukti,
               this.description,
               this.amount)
