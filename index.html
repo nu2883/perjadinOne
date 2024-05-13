@@ -339,7 +339,7 @@
         el: "#app", // Mount Vue to the element with id 'app'
         data: {
           idPerjadin: "",
-          selectedExpenseType: "",
+          selectedExpenseType: "-",
           description: "",
           bukti: false,
           amount: null,
@@ -410,12 +410,11 @@
           },
         },
         methods: {
-          saveRiil() {
+                    saveRiil() {
             if (
-              (this.selectedExpenseType !== null && this.selectedExpenseType !== undefined && this.selectedExpenseType !== '',
-              this.bukti,
-              this.description,
-              this.amount)
+              this.selectedExpenseType != "-" &&
+              (this.bukti, this.description, this.amount)
+              // alert(this.selectedExpenseType))
             ) {
               var abc = {
                 jenis: this.selectedExpenseType,
@@ -435,6 +434,7 @@
             } else {
               alert("data belum lengkap");
             }
+            this.selectedExpenseType = "-";
           },
           saveRiilsekaligus() {
             const dataArray = this.dataRiil;
