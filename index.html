@@ -50,17 +50,62 @@
             margin: 0;
             display: table; /* Ensures table takes full height of container */
         }
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #Bf00ff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            z-index: 1000;
+        }
+        .jumbotron-custom {
+            text-align: center;
+            padding: 2rem;
+            background-color: white;
+            color: black;
+            border-radius: 0.5rem;
+        }
+        .fade-out {
+            transition: opacity 2s ease-out;
+            opacity: 0;
+        }
+        .image-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .image-container img {
+            width: 100%;
+            max-width: 400px; /* Adjust this as necessary */
+        }
     </style>
   </head>
   <body>
     <div id="app" class="container mt-1">
         
                 <!-- <h1 class="display-4 text-center ">PERJADIN ONE</h1> -->
+
+                <div v-if="showOverlay" id="overlay">
+                    <div class="jumbotron-custom">
+                        <div class="image-container" :class="{ 'fade-out': imageFaded }">
+                            <img src="https://yuvalianda.com/wp-content/uploads/2020/03/Perjalanan-dinas-pns.jpg" alt="">
+                        </div>
+                        <h1 class="display-4 mb-4">Welcome!</h1>
+                        <div action="">
+                            <input v-model="satkerCode" ref="satkerInput" type="text" class="form-control mb-3" placeholder="masukkan kode satker">
+                            <button type="submit" class="btn btn-primary" @click="checkCode" style="width: 150px; height: 50px;;">Login</button>
+                        </div>
+                    </div>
+                </div>
             
 
-                <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+                <nav class="navbar navbar-expand-lg mb-3 fixed-top" style=" z-index: 999;  background-color: #Bf0fff;">
                     <div class="container">
-                        <a class="navbar-brand" href="#">
+                        <a class="navbar-brand" href="#" style="color: white;">
                             <b>Perjadin One</b>
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -90,15 +135,15 @@
                 </nav>
 
 
-      <div v-if="tampilan" class="mt-5">
+      <div v-if="tampilan" class="mt-2 position-relative" style="top: 55px;">
         <!-- tampilan muka -->
 
         <!-- First Section -->
-        <div class="row mt-2">
+        <div class="row ">
           <div class="col-lg-6 container-fluid table-container p-0">
             <!-- {{perjadins}} -->
-            <table class="table table-hover ">
-              <thead class="sticky-top bg-secondary">
+            <table class="table table-hover " >
+              <thead class="sticky-top " style=" z-index: 998; background-color: #e39ff6;">
                 <tr>
                   <th>ID Perjadin</th>
                   <th>Nama</th>
@@ -119,10 +164,10 @@
                   <td>{{ expense.Tempat_Tujuan }}</td>
                   <td>{{ expense.Tgl_Brkt | formatTanggal }}</td>
                   <td>
-                    <button
+                    <button style="background-color: #e39ff6;"
                       v-if="!expense.status"
                       @click="dipilih=expense; tampilan = false;"
-                      class="btn btn-primary"
+                      class="btn "
                     >
                       input
                     </button>
@@ -136,8 +181,14 @@
 
           <!-- Second Section (visible on LG screens, hidden on XS screens) -->
           <div class="col-lg-6 d-none d-lg-block border ">
-            <div class="row ">
-                <div class="section p-2 fixed  " v-if="filteredData.length > 0">
+            <!-- <table class="table table-container-fluid bg-warning">
+                <th class="">
+                    <td>no</td>
+                    <td>uraian</td>
+                </th>
+            </table> -->
+            
+                <div class="section p-2 fixed " v-if="filteredData.length > 0">
                   <b class="display-5 text-center"
                     ><h1 class="mb-1">
                       Rincian Pengeluaran Riil
@@ -148,8 +199,8 @@
                     </h2></b
                   >
                   
-                  <div class="container-fluid table-container p-0" >
-                      <table class="table table-hover mt-3 table table-bordered table-striped m-0 w-100" >
+                  <div class="container-fluid p-0 " >
+                      <table class="table container-fluid table-hover mt-3 table table-bordered table-striped m-0"  >
                         <thead>
                           <tr>
                             <th>ID</th>
@@ -191,11 +242,11 @@
                       href="https://docs.google.com/spreadsheets/d/1WsH56pUuMMD_wxVQ15vRCXrT-DHvPoqBHOh8BZzLrLM/edit#gid=558503235"
                       target="_blank"
                     >
-                      <button class="btn btn-warning">Cetak</button>
+                      <button class="btn  mt-2" style="background-color: #e39ff6;">Cetak</button>
                     </a>
                   </div>
                 </div>
-            </div>
+            
             <a
               href="https://wa.me/6281235827827"
               target="_blank"
@@ -211,12 +262,12 @@
         <div class="row col-12 mt-5">
             <br><br>
           <p class="text-center ml-auto">
-            <button
+            <button style="width: 150px;"
               type="button"
               class="btn btn-danger ml-auto mt-3"
               @click="tampilan=true; dataRiil = [];"
             >
-              Close
+              Tutup
             </button>
           </p>
         </div>
@@ -295,8 +346,8 @@
                 />
               </div>
               <div class="row">
-                <button @click="saveRiil" class="btn btn-primary mx-auto">
-                  Submit
+                <button @click="saveRiil" class="btn  mx-auto" style="background-color: #Bf0fff; color: white; width: 150px;">
+                  Simpan
                 </button>
               </div>
             </div>
@@ -405,6 +456,10 @@
           dataRiil: [],
           databaseRiil: [],
           expenses: JSON.parse(localStorage.getItem("expenses")) || [],
+          showOverlay: true,
+        satkerCode: '',
+        lastActivity: null,
+        imageFaded:false,
         },
         computed: {
           amount1() {
@@ -465,7 +520,38 @@
             return `${tanggal}-${bulan}-${tahun}`;
           },
         },
-        methods: {
+        methods: {  
+            checkCode() {
+            if (this.satkerCode === '527411') {
+                this.resetTimer();
+                this.imageFaded = true;
+                this.satkerCode = "";
+                document.addEventListener('mousemove', this.resetTimer);
+                document.addEventListener('keydown', this.resetTimer);
+                document.addEventListener('scroll', this.resetTimer);
+                setTimeout(() => {
+                    this.resetTimer();
+                    document.addEventListener('mousemove', this.resetTimer);
+                    document.addEventListener('keydown', this.resetTimer);
+                    document.addEventListener('scroll', this.resetTimer);
+                    this.showOverlay = false;
+                }, 1000); // Wait for the fade-out transition to complete
+            }else{
+                alert("Kode Satker Salah !!!")
+                this.satkerCode = "";
+            }
+        },
+        resetTimer() {
+            this.lastActivity = new Date().getTime();
+            clearTimeout(this.timeout);
+            this.timeout = setTimeout(() => {
+                this.showOverlay = true;
+                this.satkerCode = "";
+                document.removeEventListener('mousemove', this.resetTimer);
+                document.removeEventListener('keydown', this.resetTimer);
+                document.removeEventListener('scroll', this.resetTimer);
+            }, 1 * 60 * 1000); // 15 minutes in milliseconds
+        },
                     saveRiil() {
             if (
               this.selectedExpenseType != "-" &&
@@ -631,6 +717,9 @@
           this.ambilDataPerjadin();
           this.ambilDataRiil();
         },
+        mounted() {
+        this.$refs.satkerInput.focus(); // Autofocus the input element when component is mounted
+    },
       });
     </script>
   </body>
