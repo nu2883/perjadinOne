@@ -194,7 +194,7 @@
                       Rincian Pengeluaran Riil
                     </h1>
                     
-                    <h2 class="text-primary">
+                    <h2 style="color: #Bf0fff;">
                         {{dipilih.Nama}}
                     </h2></b
                   >
@@ -547,6 +547,8 @@
             this.timeout = setTimeout(() => {
                 this.showOverlay = true;
                 this.satkerCode = "";
+                this.imageFaded = false;
+                
                 document.removeEventListener('mousemove', this.resetTimer);
                 document.removeEventListener('keydown', this.resetTimer);
                 document.removeEventListener('scroll', this.resetTimer);
