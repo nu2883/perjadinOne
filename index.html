@@ -82,6 +82,33 @@
             width: 100%;
             max-width: 400px; /* Adjust this as necessary */
         }
+        .sticky-element {
+    position: -webkit-sticky; /* Untuk browser WebKit (Chrome, Safari, Opera) */
+    position: sticky;
+    top: 90px;
+    /* background-color: #f5f5f5; */
+    padding: 10px;
+  }
+  .sticky-element1 {
+    position: -webkit-sticky; /* Untuk browser WebKit (Chrome, Safari, Opera) */
+    position: sticky;
+    top: 100px;
+    /* background-color: #f5f5f5; */
+    
+  }
+  .sticky-element2 {
+    position: -webkit-sticky; /* Untuk browser WebKit (Chrome, Safari, Opera) */
+    position: sticky;
+    top: 100px;
+    padding: 10px;
+  }
+  .custom-column {
+      height: 75px;
+      /* border: 1px solid #ddd;Tambahkan border jika perlu */
+      /* display: flex; */
+      align-items: center;
+      justify-content: center;
+    }
     </style>
   </head>
   <body>
@@ -89,10 +116,10 @@
         
                 <!-- <h1 class="display-4 text-center ">PERJADIN ONE</h1> -->
 
-                <div v-if="showOverlay" id="overlay">
+                <!-- <div v-if="showOverlay" id="overlay">
                     <div class="jumbotron-custom">
                         <div class="image-container" :class="{ 'fade-out': imageFaded }">
-                            <img src="https://yuvalianda.com/wp-content/uploads/2020/03/Perjalanan-dinas-pns.jpg" alt="">
+                            <img src="pesawat2.jpeg" alt="">
                         </div>
                         <h1 class="display-4 mb-4">Welcome!</h1>
                         <div action="">
@@ -100,12 +127,12 @@
                             <button type="submit" class="btn btn-primary" @click="checkCode" style="width: 150px; height: 50px;;">Login</button>
                         </div>
                     </div>
-                </div>
+                </div> -->
             
 
                 <nav class="navbar navbar-expand-lg mb-3 fixed-top" style=" z-index: 999;  background-color: #Bf0fff;">
                     <div class="container">
-                        <a class="navbar-brand" href="#" style="color: white;">
+                        <a class="navbar-brand display-5" href="#" style="color: white;">
                             <b>Perjadin One</b>
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -133,17 +160,59 @@
                         </div>
                     </div>
                 </nav>
+                
+                <!-- dashboard -->
+                <br>
+                                <div  class="container mt-5" >
+                                  <!-- <div class="display-4 mb-3">
+                                    <b>
+                                      <span  style="font-weight: 50px;">Dashboard SPD</span >
+                                    </b>
+                                  </div> -->
+                                  <div class="container " v-if="dashboard">
+                                    <div class="row ">
+                                      <div class="col-sm custom-column text-center">
+                                        <p style="color:#Bf0fff; font-size:25px;">
+                                          Jumlah SPD dalam proses
+                                        </p>
+                                        <b>
+                                          <span class="display-3">{{totalObjects}}</span>
+                                        </b>
+                                      </div>
+                                      <div class="col-sm custom-column text-center">
+                                        
+                                        <p style="color:#Bf0fff; font-size:25px;">
+                                          Sudah Diajukan ke PPK
+                                        </p>
+                                        <b>
+                                          <span class="display-3">{{countTrueStatus}}</span>
+                                        </b>
+                                      </div>
+                                      <div class="col-sm custom-column text-center">
+                                        
+                                        <p style="color:#Bf0fff; font-size:25px;">
+                                          Belum Input Rincian
+                                        </p>
+                                        <b>
+                                          <strong>
+                                            <span class="display-3" >{{totalObjects - countTrueStatus}}</span>
+                                          </strong>
+                                        </b>
+                                      </div>
+                                    </div>
+                                  </div>
+                <!-- dashboard -->
 
+      <div v-if="tampilan" class="mt-2 position-relative " style="top: 55px;">
 
-      <div v-if="tampilan" class="mt-2 position-relative" style="top: 55px;">
         <!-- tampilan muka -->
-
+<!-- {{dataStatusPerjadin}} -->
         <!-- First Section -->
         <div class="row ">
           <div class="col-lg-6 container-fluid table-container p-0">
             <!-- {{perjadins}} -->
             <table class="table table-hover " >
-              <thead class="sticky-top " style=" z-index: 998; background-color: #e39ff6;">
+              <thead class=" " style=" z-index: 998; background-color: #e39ff6;">
                 <tr>
                   <th>ID Perjadin</th>
                   <th>Nama</th>
@@ -153,7 +222,8 @@
                 </tr>
                 
               </thead>
-              <tbody>
+              <tbody >
+                
                 <tr
                   v-for="(expense, index) in dataStatusPerjadin"
                   :key="index"
@@ -166,7 +236,7 @@
                   <td>
                     <button style="background-color: #e39ff6;"
                       v-if="!expense.status"
-                      @click="dipilih=expense; tampilan = false;"
+                      @click="dipilih=expense; tampilan = false; dashboard = false;"
                       class="btn "
                     >
                       input
@@ -188,13 +258,13 @@
                 </th>
             </table> -->
             
-                <div class="section p-2 fixed " v-if="filteredData.length > 0">
+                <div class="section p-2 sticky-element " v-if="filteredData.length > 0">
                   <b class="display-5 text-center"
                     ><h1 class="mb-1">
                       Rincian Pengeluaran Riil
                     </h1>
                     
-                    <h2 style="color: #Bf0fff;">
+                    <h2 style="color: #Bf0fff; font-size: 22px;">
                         {{dipilih.Nama}}
                     </h2></b
                   >
@@ -265,7 +335,7 @@
             <button style="width: 150px;"
               type="button"
               class="btn btn-danger ml-auto mt-3"
-              @click="tampilan=true; dataRiil = [];"
+              @click="tampilan=true; dashboard=true; dataRiil = [];"
             >
               Tutup
             </button>
@@ -406,7 +476,7 @@
               <div class="row">
                 <button
                   v-if="dataRiil.length > 0"
-                  @click="saveRiilsekaligus(); tampilan = true; dataRiil = [];"
+                  @click="saveRiilsekaligus(); tampilan = true; dashboard=true; dataRiil = [];"
                   type="button"
                   class="btn btn-warning ml-auto mt-3"
                 >
@@ -453,6 +523,7 @@
           perjadins: [],
           dipilih: "",
           tampilan: true,
+          dashboard:true,
           dataRiil: [],
           databaseRiil: [],
           expenses: JSON.parse(localStorage.getItem("expenses")) || [],
@@ -462,6 +533,12 @@
         imageFaded:false,
         },
         computed: {
+          totalObjects: function () {
+      return this.dataStatusPerjadin.length;
+    },
+          countTrueStatus: function () {
+      return this.dataStatusPerjadin.filter(obj => obj.status === true).length;
+    },
           amount1() {
             // Format nilai input dengan tanda pemisah ribuan
             return this.input.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
