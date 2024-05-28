@@ -444,6 +444,7 @@
                         <th>Uraian</th>
                         <th>Bukti</th>
                         <th>Amount</th>
+                        <th>aksi</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -457,6 +458,9 @@
                         <td class="text-right">
                           {{ expense.nominal | formatRibuan }}
                         </td>
+                        <td>
+                          <button @click="removeItem(index)" class="btn btn-sm btn-rounded btn-danger">x</button>
+                        </td>
                       </tr>
                       <thead>
                         <tr>
@@ -467,6 +471,8 @@
                           <th class="text-right">
                             {{totalNominal1 | formatRibuan}}
                           </th>
+                          <th></th>
+                          
                         </tr>
                       </thead>
                     </tbody>
@@ -598,6 +604,9 @@
           },
         },
         methods: {  
+          removeItem(index) {
+                    this.dataRiil.splice(index, 1);
+                },
             checkCode() {
             if (this.satkerCode === '527411') {
                 this.resetTimer();
@@ -646,6 +655,8 @@
                 nominal: this.amount,
               };
               this.dataRiil.push(abc);
+
+
 
               this.selectedExpenseType = "";
 
@@ -795,6 +806,7 @@
         created() {
           this.ambilDataPerjadin();
           this.ambilDataRiil();
+  
         },
         mounted() {
         this.$refs.satkerInput.focus(); // Autofocus the input element when component is mounted
