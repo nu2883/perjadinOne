@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Perjadin One</title>
+    <title>Perjadin One 2025</title>
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -56,7 +56,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background-color: #Bf00ff;
+            background-color:RGB(159, 226, 191);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -121,7 +121,7 @@
                         <div class="image-container" :class="{ 'fade-out': imageFaded }">
                             <img src="https://yuvalianda.com/wp-content/uploads/2020/03/Perjalanan-dinas-pns.jpg" alt="">
                         </div>
-                        <h1 class="display-4 mb-4">Welcome!</h1>
+                        <h1 class="display-4 mb-4">Welcome! 2025</h1>
                         <div action="">
                             <input v-model="satkerCode" ref="satkerInput" type="text" class="form-control mb-3" placeholder="masukkan kode satker">
                             <button type="submit" class="btn btn-primary" @click="checkCode" style="width: 150px; height: 50px;;">Login</button>
@@ -130,7 +130,7 @@
                 </div>
             
 
-                <nav class="navbar navbar-expand-lg mb-3 fixed-top" style=" z-index: 999;  background-color: #Bf0fff;">
+                <nav class="navbar navbar-expand-lg mb-3 fixed-top" style=" z-index: 999;  background-color: RGB(159, 226, 191);">
                     <div class="container">
                         <a class="navbar-brand display-5" href="#" style="color: white;">
                             <b>Perjadin One</b>
@@ -212,7 +212,7 @@
           <div class="col-lg-6 container-fluid table-container p-0">
             <!-- {{perjadins}} -->
             <table class="table table-hover " >
-              <thead class=" " style=" z-index: 998; background-color: #e39ff6;">
+              <thead class=" " style=" z-index: 998; background-color: RGB(159, 226, 191);">
                 <tr>
                   <th>ID Perjadin</th>
                   <th>Nama</th>
@@ -234,7 +234,7 @@
                   <td>{{ expense.Tempat_Tujuan }}</td>
                   <td>{{ expense.Tgl_Brkt | formatTanggal }}</td>
                   <td>
-                    <button style="background-color: #e39ff6;"
+                    <button style="background-color: RGB(159, 226, 191);"
                       v-if="!expense.status"
                       @click="dipilih=expense; tampilan = false; dashboard = false;"
                       class="btn "
@@ -335,9 +335,9 @@
             <button style="width: 150px;"
               type="button"
               class="btn btn-danger ml-auto mt-3"
-              @click="tampilan=true; dashboard=true; dataRiil = [];"
+              @click="tampilan=true; dashboard=true;"
             >
-              Tutup
+              Batal
             </button>
           </p>
         </div>
@@ -424,7 +424,8 @@
           </div>
           <div class="col-6">
             <div class="section p-1 mt-3">
-              <!-- {{dipilih}}
+              <!-- {{dipilih}} -->
+              <!-- 
               <br /><br />
               {{databaseRiil}}
               <br /><br />
@@ -679,7 +680,7 @@
               var a6 = obj.uraian;
               var a7 = obj.nominal;
 
-              var lin = `https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=insert&table=dataPengeluaranRiil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}","status":true}`;
+              var lin = `https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=insert&table=data_riil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}","status":true}`;
               // this.test = lin;
               let app = this;
               $.ajax({
@@ -739,7 +740,7 @@
 
             // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
             var url =
-              "https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=read&table=dataPengeluaranRiil";
+              "https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=read&table=data_riil";
 
             let app = this;
             $.getJSON(url, function (json) {
@@ -753,7 +754,7 @@
 
             // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
             var url =
-              "https://script.google.com/macros/s/AKfycbzfOmAEsUqWORVFgVgp3-juYufE-2xrp5hn85E2hZT0hXLw8_Ur-9sxY1eCDQLo8mJI/exec?action=read&table=dataPerjadinJatim24";
+              "https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=read&table=dataPerjadinJatim25";
 
             let app = this;
             $.getJSON(url, function (json) {
