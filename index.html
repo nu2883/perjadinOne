@@ -350,7 +350,7 @@
             <br /><br />
             <!-- {{perjadins}} -->
             <div>
-              <div class="mb-3">
+              <div class="mb-2">
                 <label for="idPerjadin" class="form-label">ID Perjadin</label>
                 <input
                   disabled
@@ -361,7 +361,7 @@
                 />
                 <!-- {{dipilih}} -->
               </div>
-              <div class="mb-3">
+              <div class="mb-2">
                 <label for="expenseType" class="form-label"
                   >jenis pengeluaran</label
                 >
@@ -377,20 +377,21 @@
                   <option value="Representatif">Representatif</option>
                 </select>
               </div>
-              <div class="mb-3">
+              <div class="mb-2">
                 <!-- <label for="description" class="form-label">Uraian</label> -->
-                <input
-                  type="text"
-                  id="description"
-                  class="form-control"
-                  v-model="description"
-                  placeholder="Input Uraian"
-                />
+                
                 <p>contoh :</p>
                 <p class="text-success">Uang Harian (3 x 328.000)</p>
                 <p class="text-success">Biaya Toll Surabaya - Malang PP</p>
                 <p class="text-success">Hotel Aston 2 malam</p>
                 <p class="text-success">Uang Representatif (3 x 150,000)</p>
+                <input
+                  type="text"
+                  id="description"
+                  class="form-control mt-2"
+                  v-model="description"
+                  placeholder="Input Uraian"
+                />
               </div>
               <div class="mb-3">
                 <b>
@@ -481,14 +482,20 @@
               </div>
 
               <div class="row">
-                <button
+                <div class="input-group mb-3 mt-3" v-if="dataRiil.length > 0">
+                    <a href="https://docs.google.com/spreadsheets/d/16aMwpbirzpbxMOgJdGemzHUB8j78W48tuK6o-2zsYt0/edit?gid=1226670547#gid=1226670547" target="_blank" rel="noopener noreferrer"><button class="btn btn-info ml-auto " type="button" >Reff Akun</button></a>
+  <input type="text" class="form-control" placeholder="Akun (contoh : PPA2.CD.6212.FAL.001.100.0B.521211)" v-model="akun" aria-label="Recipient's username" aria-describedby="button-addon2">
+  <button class="btn btn-warning ml-auto " type="button" id="button-addon2" @click="saveRiilsekaligus(); tampilan = true; dashboard=true; dataRiil = [];"  v-if="isAkunValid" >Kirim ke PPK</button>
+  
+</div>
+                <!-- <button
                   v-if="dataRiil.length > 0"
                   @click="saveRiilsekaligus(); tampilan = true; dashboard=true; dataRiil = [];"
                   type="button"
                   class="btn btn-warning ml-auto mt-3"
                 >
                   Kirim ke PPK
-                </button>
+                </button> -->
               </div>
             </div>
           </div>
@@ -522,6 +529,8 @@
       new Vue({
         el: "#app", // Mount Vue to the element with id 'app'
         data: {
+        akun:'',
+        isAkunValid: false,
           idPerjadin: "",
           selectedExpenseType: "-",
           description: "",
@@ -539,7 +548,14 @@
         lastActivity: null,
         imageFaded:false,
         },
+         watch: {
+    akun(newValue) {
+      // Validasi apakah panjang string tepat 39 karakter
+      this.isAkunValid = newValue.length === 34;
+    },
+  },
         computed: {
+         
           totalObjects: function () {
       return this.dataStatusPerjadin.length;
     },
@@ -679,8 +695,9 @@
               var a5 = obj.bukti;
               var a6 = obj.uraian;
               var a7 = obj.nominal;
+              var a8 = this.akun;
 
-              var lin = `https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=insert&table=data_riil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}","status":true}`;
+              var lin = `https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=insert&table=data_riil&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}","status":true,"akun":"${a8}"}`;
               // this.test = lin;
               let app = this;
               $.ajax({
