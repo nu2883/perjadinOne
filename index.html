@@ -418,7 +418,7 @@
               </div>
               <div class="row">
                 <button @click="saveRiil" class="btn  mx-auto" style="background-color: #Bf0fff; color: white; width: 150px;">
-                  Simpan
+                  Tambah Data
                 </button>
               </div>
             </div>
@@ -485,7 +485,14 @@
                 <div class="input-group mb-3 mt-3" v-if="dataRiil.length > 0">
                     <a href="https://docs.google.com/spreadsheets/d/16aMwpbirzpbxMOgJdGemzHUB8j78W48tuK6o-2zsYt0/edit?gid=1226670547#gid=1226670547" target="_blank" rel="noopener noreferrer"><button class="btn btn-info ml-auto " type="button" >data Akun</button></a>
   <input type="text" class="form-control" placeholder="Akun (contoh : PPA2.CD.6212.FAL.001.100.0B.521211)" v-model="akun" aria-label="Recipient's username" aria-describedby="button-addon2">
-  <button class="btn btn-warning ml-auto " type="button" id="button-addon2" @click="saveRiilsekaligus(); tampilan = true; dashboard=true; dataRiil = [];"  v-if="isAkunValid" >Kirim ke PPK</button>
+  <button 
+  class="btn btn-warning ml-auto" 
+  type="button" 
+  id="button-addon2" 
+  @click="saveRiilsekaligus(); tampilan = true; dashboard = true; dataRiil = [];"  
+  :disabled="!isAkunValid">
+  Kirim ke PPK
+</button>
   
 </div>
                 <!-- <button
