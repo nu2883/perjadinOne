@@ -133,7 +133,7 @@
                 <nav class="navbar navbar-expand-lg mb-3 fixed-top" style=" z-index: 999;  background-color: RGB(159, 226, 191);">
                     <div class="container">
                         <a class="navbar-brand display-5" href="#" style="color: white;">
-                            <b>Perjadin One</b>
+                            <b>Perjadin One : {{kodeSatker}}</b> ({{satkerCode}})
                         </a>
                         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                             <span class="navbar-toggler-icon"></span>
@@ -214,7 +214,7 @@
             <table class="table table-hover " >
               <thead class=" " style=" z-index: 998; background-color: RGB(159, 226, 191);">
                 <tr>
-                  <th>ID Perjadin</th>
+                  <th>No SPD</th>
                   <th>Nama</th>
                   <th>Tujuan Perjadin</th>
                   <th>Tanggal Berangkat</th>
@@ -273,7 +273,7 @@
                       <table class="table container-fluid table-hover mt-3 table table-bordered table-striped m-0"  >
                         <thead>
                           <tr>
-                            <th>ID</th>
+                            <th>No SPD</th>
                             <th>Jenis</th>
                             <th>Uraian</th>
                             <th>Bukti</th>
@@ -380,7 +380,7 @@
               <div class="mb-2">
                 <!-- <label for="description" class="form-label">Uraian</label> -->
                 
-                <p>contoh :</p>
+                <p>contoh uraian:</p>
                 <p class="text-success">Uang Harian (3 x 328.000)</p>
                 <p class="text-success">Biaya Toll Surabaya - Malang PP</p>
                 <p class="text-success">Hotel Aston 2 malam</p>
@@ -483,14 +483,23 @@
 
               <div class="row">
                 <div class="input-group mb-3 mt-3" v-if="dataRiil.length > 0">
-                    <a href="https://docs.google.com/spreadsheets/d/16aMwpbirzpbxMOgJdGemzHUB8j78W48tuK6o-2zsYt0/edit?gid=1226670547#gid=1226670547" target="_blank" rel="noopener noreferrer"><button class="btn btn-info ml-auto " type="button" >data Akun</button></a>
-  <input type="text" class="form-control" placeholder="Akun (contoh : PPA2.CD.6212.FAL.001.100.0B.521211)" v-model="akun" aria-label="Recipient's username" aria-describedby="button-addon2">
-  <button 
+                    <a href="https://docs.google.com/spreadsheets/d/16aMwpbirzpbxMOgJdGemzHUB8j78W48tuK6o-2zsYt0/edit?gid=1226670547#gid=1226670547" target="_blank" rel="noopener noreferrer"><button v-if="satkerCode === '527411'" class="btn btn-info ml-auto " type="button" >data Akun</button></a>
+  <input v-if="satkerCode === '527411'" type="text" class="form-control" placeholder="Akun (contoh : PPA2.CD.6212.FAL.001.100.0B.521211)" v-model="akun" aria-label="Recipient's username" aria-describedby="button-addon2">
+
+  <button v-if="satkerCode==='527411'"
   class="btn btn-warning ml-auto" 
   type="button" 
   id="button-addon2" 
   @click="saveRiilsekaligus(); tampilan = true; dashboard = true; dataRiil = [];"  
   :disabled="!isAkunValid">
+  Kirim ke PPK
+</button>
+
+<button v-else
+  class="btn btn-warning ml-auto" 
+  type="button" 
+  id="button-addon2" 
+  @click="saveRiilsekaligus(); tampilan = true; dashboard = true; dataRiil = [];">
   Kirim ke PPK
 </button>
   
@@ -537,6 +546,7 @@
         el: "#app", // Mount Vue to the element with id 'app'
         data: {
         akun:'',
+        kodeSatker:'',
         isAkunValid: false,
           idPerjadin: "",
           selectedExpenseType: "-",
@@ -633,9 +643,30 @@
                 },
             checkCode() {
             if (this.satkerCode === '527411') {
+              this.ambilDataPerjadin();
+              this.ambilDataRiil();
+              this.kodeSatker = "Kanwil DJPb Prov. Jawa Timur";
                 this.resetTimer();
                 this.imageFaded = true;
-                this.satkerCode = "";
+                // this.satkerCode = "";
+                document.addEventListener('mousemove', this.resetTimer);
+                document.addEventListener('keydown', this.resetTimer);
+                document.addEventListener('scroll', this.resetTimer);
+                setTimeout(() => {
+                    this.resetTimer();
+                    document.addEventListener('mousemove', this.resetTimer);
+                    document.addEventListener('keydown', this.resetTimer);
+                    document.addEventListener('scroll', this.resetTimer);
+                    this.showOverlay = false;
+                }, 1000); // Wait for the fade-out transition to complete
+            }else
+                 if (this.satkerCode === '527425') {
+              this.ambilDataPerjadinSby1();
+              this.ambilDataRiilSby1();
+                  this.kodeSatker = "KPPN Surabaya I";
+                this.resetTimer();
+                this.imageFaded = true;
+                // this.satkerCode = "";
                 document.addEventListener('mousemove', this.resetTimer);
                 document.addEventListener('keydown', this.resetTimer);
                 document.addEventListener('scroll', this.resetTimer);
@@ -693,6 +724,8 @@
             this.selectedExpenseType = "-";
           },
           saveRiilsekaligus() {
+            if(this.satkerCode == '527411'){
+              // alert("kanwil");
             const dataArray = this.dataRiil;
             dataArray.forEach((obj) => {
               var waktu1 = Date.now();
@@ -724,7 +757,42 @@
               });
 
               console.log("Task Berhasil di Simpan");
+            });}
+            else if(this.satkerCode == '527425'){
+              // alert("sby 1");
+               const dataArray = this.dataRiil;
+            dataArray.forEach((obj) => {
+              var waktu1 = Date.now();
+              var a2 = obj.jenis;
+              var a3 = obj.nama;
+              var a4 = obj.no;
+              var a5 = obj.bukti;
+              var a6 = obj.uraian;
+              var a7 = obj.nominal;
+              var a8 = '524111';
+
+              var lin = `https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=insert&table=data_riilsby1&data={"id":${waktu1}, "noSPD":"'${a4}","namaPegawai":"'${a3}","jenis":"'${a2}","bukti":"${a5} ","uraian":"${a6}","nominal":"${a7}","status":true,"akun":"${a8}"}`;
+              // this.test = lin;
+              let app = this;
+              $.ajax({
+                type: "GET",
+                url: lin,
+                crossDomain: true,
+                dataType: "jsonp",
+                dataType: "text",
+                success: function (resultData) {
+                  //   alert("Save Complete");
+                  // app.newTodo.task = ''
+                  // app.newTodo.deadline = ''
+                  // app.newTodo.monthly = false
+                  // app.isLoading = false;
+                  app.ambilDataRiilSby1();
+                },
+              });
+
+              console.log("Task Berhasil di Simpan");
             });
+            }
           },
 
           saveRiilsatu2() {
@@ -772,6 +840,19 @@
               app.databaseRiil = json.data;
             });
           },
+                    ambilDataRiilSby1() {
+            this.databaseRiil = [];
+
+            // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
+            var url =
+              "https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=read&table=data_riilsby1";
+
+            let app = this;
+            $.getJSON(url, function (json) {
+              // console.log(json.data);
+              app.databaseRiil = json.data;
+            });
+          },
 
           ambilDataPerjadin() {
             this.perjadins = [];
@@ -779,6 +860,19 @@
             // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
             var url =
               "https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=read&table=dataPerjadinJatim25";
+
+            let app = this;
+            $.getJSON(url, function (json) {
+              // console.log(json.data);
+              app.perjadins = json.data;
+            });
+          },
+            ambilDataPerjadinSby1() {
+            this.perjadins = [];
+
+            // var url ="https://script.google.com/macros/s/AKfycbyc7wzSrUGxQhcBN5EfVC-rNRj3wncZJOVTWAChXtSwnrHkGjoaoI91bggme_fUOIP9/exec?action=read&table=query";
+            var url =
+              "https://script.google.com/macros/s/AKfycbydng-xudSg_7myD98TKOWCpo2vvKFb_cQxOv85aTP-4ukbWEdOnowgEkM6peoujwxu/exec?action=read&table=dataPerjadinJatim25sby1";
 
             let app = this;
             $.getJSON(url, function (json) {
@@ -828,11 +922,11 @@
             alert("Expense saved successfully!");
           },
         },
-        created() {
-          this.ambilDataPerjadin();
-          this.ambilDataRiil();
+        // created() {
+        //   this.ambilDataPerjadin();
+        //   this.ambilDataRiil();
   
-        },
+        // },
         mounted() {
         this.$refs.satkerInput.focus(); // Autofocus the input element when component is mounted
     },
